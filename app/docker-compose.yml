@@ -1,0 +1,14 @@
+services:
+  app:
+    image: 'node:22-alpine'
+    ports:
+      - '3000:3000'
+    working_dir: /app
+    user: "${USER_ID}:${GROUP_ID}"
+    volumes:
+      - type: bind
+        source: .
+        target: /app
+    tty: true
+    stdin_open: true
+    command: sh -c "npm i && npm run dev"
