@@ -10,7 +10,7 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('Addresses', function (Blueprint $table) {
+        Schema::create('address', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
             $table->string('cep');
@@ -30,6 +30,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('Addresses');
+        Schema::dropIfExists('address');
     }
 };
