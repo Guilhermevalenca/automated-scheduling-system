@@ -22,6 +22,10 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'cpf',
+        'registration_qacademico',
+        'is_cradt',
+        'is_den'
     ];
 
     /**
@@ -45,5 +49,15 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function teachers()
+    {
+        return $this->hasOne(Teacher::class);
+    }
+
+    public function moreDatas()
+    {
+        return $this->hasOne(MoreData::class);
     }
 }
