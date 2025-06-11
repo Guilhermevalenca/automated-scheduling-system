@@ -11,7 +11,7 @@ class UpdateUserRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,13 @@ class UpdateUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => 'string|max:255',
+            'email' => 'unique:users,email|max:255',
+            'cpf' => 'string|unique:users,cpf|max:14',
+            'password' => 'string|min:8',
+            'registration_qacademico' => 'nullable|string|max:255|unique:users,registration_qacademico',
+            'is_cradt' => 'boolean',
+            'is_den' => 'boolean',
         ];
     }
 }

@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Http\Requests\StoreUserRequest;
-use app\http\Requests\UpdateUserRequest;
+use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
 class UserController extends Controller
 {
@@ -57,16 +56,24 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateUserRequest $request, User $user)
     {
-        //
+        $user->fill($request->validated());
+        if ($request->has('password')) {
+            $user->password = bcrypt($request->password);
+        }
+        $user->save();
+
+        return response()->json($user);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(User $user)
     {
-        //
+        $user->delete();
+        return response()->json(null, 204);
     }
+
 }
