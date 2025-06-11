@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreCourseRequest;
 use App\Http\Requests\UpdateCourseRequest;
 use App\Models\Course;
+use App\Models\Subject;
 
 class CourseController extends Controller
 {
@@ -13,7 +14,8 @@ class CourseController extends Controller
      */
     public function index()
     {
-        //
+        $courses = Course::orderBy('name')->paginate();
+        return response()->json($courses);
     }
 
     /**
@@ -29,15 +31,22 @@ class CourseController extends Controller
      */
     public function store(StoreCourseRequest $request)
     {
-        //
+        $course = Course::create($request->validated());
+
+        if ($request->has('subjects')) {
+            $subjectIds = $request->input('subjects');
+            Subject::whereIn('id', $subjectIds)->update(['course_id' => $course->id]);
+        }
+        return response()->json($course, 201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Course $courses)
+    public function show(Course $course)
     {
-        //
+        $course->load('subjects')->orderBy('name');
+        return response()->json($course);
     }
 
     /**
@@ -51,16 +60,25 @@ class CourseController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateCourseRequest $request, Course $courses)
+    public function update(UpdateCourseRequest $request, Course $course)
     {
-        //
+        $course->update($request->validated());
+
+        if ($request->has('subjects')) {
+            $course->subjects()->update(['course_id' => null]);
+            $subjectIds = $request->input('subjects');
+            Subject::whereIn('id', $subjectIds)->update(['course_id' => $course->id]);
+        }
+        return response()->json($course);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Course $courses)
+    public function destroy(Course $course)
     {
-        //
+        $course->subjects()->update(['course_id' => null]);
+        $course->delete();
+        return response()->json(null, 204);
     }
 }

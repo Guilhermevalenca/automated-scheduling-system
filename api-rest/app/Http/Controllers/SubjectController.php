@@ -13,7 +13,8 @@ class SubjectController extends Controller
      */
     public function index()
     {
-        //
+        $subjects = Subject::orderBy('name')->paginate();
+        return response()->json($subjects);
     }
 
     /**
@@ -29,15 +30,19 @@ class SubjectController extends Controller
      */
     public function store(StoreSubjectRequest $request)
     {
-        //
+        $subject = Subject::create($request->validated());
+
+        return response()->json($subject, 201);
     }
+
 
     /**
      * Display the specified resource.
      */
-    public function show(Subject $subjects)
+    public function show(Subject $subject)
     {
-        //
+        $subject->load('course')->orderBy('name');
+        return response()->json($subject);
     }
 
     /**
@@ -51,16 +56,20 @@ class SubjectController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateSubjectRequest $request, Subject $subjects)
+    public function update(UpdateSubjectRequest $request, Subject $subject)
     {
-        //
+        $subject->update($request->validated());
+
+        return response()->json($subject);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Subject $subjects)
+    public function destroy(Subject $subject)
     {
-        //
+        $subject->delete();
+
+        return response()->json(null, 204);
     }
 }

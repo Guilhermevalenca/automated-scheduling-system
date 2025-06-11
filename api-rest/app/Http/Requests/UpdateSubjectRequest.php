@@ -11,7 +11,7 @@ class UpdateSubjectRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,13 @@ class UpdateSubjectRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => 'required|string|max:255|unique:subjects,name',
+            'workload' => 'required|integer',
+            'is_optional' => 'boolean',
+            'prerequisite_id' => 'nullable|exists:subjects,id',
+            'course_id' => 'nullable|exists:courses,id',
+            'teacher_id' => 'nullable|exists:teachers,user_id',
+            'class_id' => 'nullable|exists:classes,id',
         ];
     }
 }

@@ -3,6 +3,6 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
+require __DIR__ . '/courseRoute.php';
+require __DIR__ . '/subjectRoute.php';
+require __DIR__ . '/userRoute.php';
